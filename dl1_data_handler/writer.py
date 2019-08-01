@@ -992,6 +992,9 @@ class DL1DataWriter:
         self.gain_selector.thresholds[cam_id] = threshold
 
         waveform, gain_mask = self.gain_selector.select_gains(cam_id, waveform)
+        if gain_mask.ndim == 1:
+            gain_mask = gain_mask[:, None]
+
         signal_mask = gain_mask.max(axis=1)
 
         combined_image = image[0].copy()
