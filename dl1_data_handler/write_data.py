@@ -1,4 +1,4 @@
-"""Load data from ctapipe EventSources and dump to file."""
+"""Load data from ctapipe/MAGIC EventSources and dump to file."""
 from dl1_data_handler.writer import DL1DataDumper, DL1DataWriter
 
 import argparse
@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 if not sys.warnoptions:
     warnings.simplefilter("ignore")
 
-if __name__ == '__main__':
+def main():
+
     parser = argparse.ArgumentParser(
         description=(
             "Read DL1 data via event source into ctapipe containers, \
@@ -25,10 +26,10 @@ if __name__ == '__main__':
         help='YAML file containing matched groups of input filenames and \
         output filenames.')
     parser.add_argument(
-        '--output_dir',
+        '--output_dir', '-o',
         help='Path to directory to create output files. It overwrites the output path found in the runlist.')
     parser.add_argument(
-        '--config_file',
+        '--config_file', '-c',
         help='YAML configuration file for settings.')
     parser.add_argument(
         "--debug",
@@ -87,3 +88,6 @@ if __name__ == '__main__':
         data_writer = DL1DataWriter()
 
     data_writer.process_data(runlist)
+
+if __name__ == '__main__':
+    main()

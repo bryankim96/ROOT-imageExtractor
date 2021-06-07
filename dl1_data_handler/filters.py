@@ -4,6 +4,7 @@ import numpy as np
 # Event Filters #
 #################
 
+
 def event_intensity_filter(reader, file, i_min=-np.inf, i_max=np.inf):
     """
     Prototype of Filter events on intensity (in pe)
@@ -23,16 +24,18 @@ def event_intensity_filter(reader, file, i_min=-np.inf, i_max=np.inf):
     total_intensity = np.zeros(len(file.root.Events))
     for tel_type in tel_types:
         indices = file.root.Events[:][tel_type + '_indices']
-        images = file.root._f_get_child(tel_type)[:]['charge']
+        images = file.root['Images']._f_get_child(tel_type)[:]['charge']
         images = images[indices]
         total_intensity += images.sum(axis=(1, 2))
     mask1 = i_min < total_intensity
     mask2 = total_intensity < i_max
     return set(np.arange(len(file.root.Events))[mask1 & mask2])
 
+
 #################
 # Image Filters #
 #################
+
 
 def image_intensity_filter(reader, images, i_min=-np.inf, i_max=np.inf):
     """
@@ -53,6 +56,7 @@ def image_intensity_filter(reader, images, i_min=-np.inf, i_max=np.inf):
     mask1 = i_min < amps
     mask2 = amps < i_max
     return mask1 & mask2
+
 
 def image_intensity_after_cleaning_filter(reader, images, i_min=-np.inf, i_max=np.inf, **opts):
     """
@@ -92,6 +96,7 @@ def image_intensity_after_cleaning_filter(reader, images, i_min=-np.inf, i_max=n
     int_mask = np.apply_along_axis(int_after_clean, 1, images)
     return int_mask
 
+
 def image_cleaning_filter(reader, images, **opts):
     """
     Filter images according to a cleaning operation.
@@ -123,6 +128,7 @@ def image_cleaning_filter(reader, images, **opts):
 
     clean_mask = np.apply_along_axis(clean, 1, images)
     return clean_mask.any(axis=1)
+
 
 def leakage_filter(reader, images, leakage_value=1.0, leakage_number=2, **opts):
     """

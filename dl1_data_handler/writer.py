@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Load data from ctapipe EventSources and dump to file."""
+"""--Deprecated DL1 writer. Use ctapipe stage1 tool instead-- Load data from ctapipe EventSources and dump to file."""
 
 from abc import ABC, abstractmethod
 import pkg_resources
@@ -395,8 +395,14 @@ class CTAMLDataDumper(DL1DataDumper):
             event_row['az'] = event_container.mc.az.value
             event_row['array_pointing_alt'] = event_container.pointing.array_altitude.value
             event_row['array_pointing_az'] = event_container.pointing.array_azimuth.value
-            event_row['delta_direction'] = np.array([event_row['az']-event_row['array_pointing_az'],
-                                           event_row['alt']-event_row['array_pointing_alt']])
+            # North pointing correction
+            delta_alt = event_row['alt']-event_row['array_pointing_alt']
+            delta_az = event_row['az']-event_row['array_pointing_az']
+            if delta_az > np.pi:
+                delta_az -= 2*np.pi
+            elif delta_az < -np.pi:
+                delta_az += 2*np.pi
+            event_row['delta_direction'] = np.array([delta_alt, delta_az], np.float32)
 
         store_event = False
         for tel_type in self.subarray:

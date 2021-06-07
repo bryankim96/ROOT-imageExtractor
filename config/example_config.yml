@@ -14,7 +14,7 @@ Data Writer:
     # Boolean flag indicating whether to save non-triggered Monte Carlo events in a separate MC_Events table.
     save_mc_events: False
     # Telescope ids dumped to file. Specify the telescopes to write to the the output file.
-    selected_telescope_ids: [1]
+    selected_telescope_ids: [1,2]
     #selected_telescope_ids: [1,2,3,4]
     # Settinigs for the GainSelector
     gain_selector_settings:
