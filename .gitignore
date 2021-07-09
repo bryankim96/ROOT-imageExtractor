@@ -9,3 +9,6 @@ dl1_data_handler/__pycache__
 build
 dist
 dl1_data_handler.egg-info
+.idea
+*__pycache__
+ctapipe_io_dl1dh.egg-info/
